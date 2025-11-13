@@ -11,6 +11,7 @@ sites:
     slug: valg-randers-dk
 
 status-website:
+  baseUrl: /Randers-uptime
   cname: false
   logoUrl: https://www.randers.dk/media/o0zlm1pt/randers_kommune_logo.svg
   name: Randers Kommune – Driftstatus
