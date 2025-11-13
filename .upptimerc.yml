@@ -11,10 +11,6 @@ sites:
     url: https://skolernesudviklingscenter.randers.dk/da/soeg
     slug: skolernesudviklingscenter-randers-dk
 
-  - name: Vestervangskolen
-    url: https://vestervangskolen.randers.dk/da/soeg
-    slug: vestervangskolen-randers-dk
-
   - name: Nordbyen Kalder
     url: https://nordbyenkalder.randers.dk/soeg
     slug: nordbyenkalder-randers-dk
@@ -24,24 +20,8 @@ sites:
     slug: sprogcenter-randers-dk
 
   - name: Børnehuset Mælkevejen
-    url: https://maelkevejen.randers.dk/soeg
-    slug: maelkevejen-randers-dk
-
-  - name: Børnehuset Harhaven
-    url: https://harhaven.randers.dk/soeg
-    slug: harhaven-randers-dk
-
-  - name: Børnehuset Svalereden
-    url: https://svalereden.randers.dk/soeg
-    slug: svalereden-randers-dk
-
-  - name: Børnehuset Spentrup
-    url: https://boernehusetspentrup.randers.dk/soeg
-    slug: boernehusetspentrup-randers-dk
-
-  - name: Børnehuset Regnbuen
-    url: https://regnbuen.randers.dk/soeg
-    slug: regnbuen-randers-dk
+    url: https://www.museumoj.dk
+    slug: museumoj.dk
 
 
 status-website:
