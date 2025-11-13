@@ -1,20 +1,15 @@
-# -----------------------------------------------------
-# Upptime konfiguration for Randers Kommune
-# Repo: https://github.com/JEngrob/Randers-uptime
-# -----------------------------------------------------
-
 owner: JEngrob
 repo: Randers-uptime
 
-# Overvågning af Randers.dk og valg.randers.dk
 sites:
   - name: Randers.dk
     url: https://www.randers.dk
+    slug: randers-dk
 
   - name: Valg.randers.dk
     url: https://valg.randers.dk
+    slug: valg-randers-dk
 
-# Status-side indstillinger
 status-website:
   cname: false
   logoUrl: https://www.randers.dk/media/o0zlm1pt/randers_kommune_logo.svg
@@ -24,24 +19,20 @@ status-website:
     Her kan du følge driftsstatus for Randers.dk og Valg.randers.dk.
     Status opdateres automatisk hvert 5. minut.
 
-# Notifikationer (kan udvides senere med Teams, mail, webhook)
 notifications:
   slack: false
   telegram: false
   webhook: false
   email: false
 
-# Check-indstillinger
 checks:
-  frequency: 5 # 5-minutters interval
-  maxResponseTime: 60000 # 60 sekunder før "slow" markeres
+  frequency: 5
+  maxResponseTime: 60000
 
-# Generelle Upptime-indstillinger
 deployments:
   commitsPerPage: 30
   timezone: Europe/Copenhagen
 
-# Tema (kan ændres til dansk senere hvis du vil)
 theme:
   status-website:
     defaultLanguage: en
