@@ -1,15 +1,38 @@
 owner: JEngrob
 repo: Randers-uptime
 
+# Overvågning af Randers.dk og alle ønskede subsites
 sites:
   - name: Randers.dk
     url: https://www.randers.dk
     slug: randers-dk
 
-  - name: Valg.randers.dk
-    url: https://valg.randers.dk
-    slug: valg-randers-dk
+  - name: Skolernes Udviklingscenter
+    url: https://skolernesudviklingscenter.randers.dk
+    slug: skolernesudviklingscenter-randers-dk
 
+  - name: Vestervangskolen
+    url: https://vestervangskolen.randers.dk
+    slug: vestervangskolen-randers-dk
+
+  - name: Nordbyen Kalder
+    url: https://nordbyenkalder.randers.dk
+    slug: nordbyenkalder-randers-dk
+
+  - name: Sprogcenter Randers
+    url: https://sprogcenter.randers.dk
+    slug: sprogcenter-randers-dk
+
+  - name: Børnehuset Mælkevejen
+    url: https://maelkevejen.randers.dk
+    slug: maelkevejen-randers-dk
+
+  - name: Børnehuset Harhaven
+    url: https://harhaven.randers.dk
+    slug: harhaven-randers-dk
+
+
+# Status-side indstillinger
 status-website:
   baseUrl: /Randers-uptime
   cname: false
@@ -17,8 +40,8 @@ status-website:
   name: Randers Kommune – Driftstatus
   introTitle: Driftstatus for Randers Kommunes vigtigste sider
   introMessage: >
-    Her kan du følge driftsstatus for Randers.dk og Valg.randers.dk.
-    Status opdateres automatisk hvert 5. minut.
+    Her kan du følge driftsstatus for Randers.dk og tilhørende subsites.
+    Data opdateres automatisk hvert 5. minut.
 
 notifications:
   slack: false
