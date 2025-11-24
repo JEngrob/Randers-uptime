@@ -5,16 +5,16 @@
     "icon": "https://icons.duckduckgo.com/ip3/www.randers.dk.ico",
     "slug": "randers-dk",
     "status": "up",
-    "uptime": "99.91%",
+    "uptime": "99.92%",
     "uptimeDay": "100.00%",
     "uptimeWeek": "100.00%",
-    "uptimeMonth": "99.91%",
-    "uptimeYear": "99.91%",
-    "time": 1609,
-    "timeDay": 1762,
-    "timeWeek": 1342,
-    "timeMonth": 1609,
-    "timeYear": 1609,
+    "uptimeMonth": "99.92%",
+    "uptimeYear": "99.92%",
+    "time": 1604,
+    "timeDay": 1481,
+    "timeWeek": 1518,
+    "timeMonth": 1604,
+    "timeYear": 1604,
     "dailyMinutesDown": {
       "2025-11-14": 13
     }
@@ -30,11 +30,11 @@
     "uptimeWeek": "100.00%",
     "uptimeMonth": "99.96%",
     "uptimeYear": "99.96%",
-    "time": 1666,
-    "timeDay": 2600,
-    "timeWeek": 1497,
-    "timeMonth": 1666,
-    "timeYear": 1666,
+    "time": 1674,
+    "timeDay": 1826,
+    "timeWeek": 1708,
+    "timeMonth": 1674,
+    "timeYear": 1674,
     "dailyMinutesDown": {
       "2025-11-14": 6
     }
@@ -50,11 +50,11 @@
     "uptimeWeek": "100.00%",
     "uptimeMonth": "99.96%",
     "uptimeYear": "99.96%",
-    "time": 1550,
-    "timeDay": 2358,
-    "timeWeek": 1443,
-    "timeMonth": 1550,
-    "timeYear": 1550,
+    "time": 1555,
+    "timeDay": 1654,
+    "timeWeek": 1637,
+    "timeMonth": 1555,
+    "timeYear": 1555,
     "dailyMinutesDown": {
       "2025-11-14": 6
     }
@@ -70,11 +70,11 @@
     "uptimeWeek": "100.00%",
     "uptimeMonth": "99.96%",
     "uptimeYear": "99.96%",
-    "time": 1666,
-    "timeDay": 2237,
-    "timeWeek": 1459,
-    "timeMonth": 1666,
-    "timeYear": 1666,
+    "time": 1662,
+    "timeDay": 1599,
+    "timeWeek": 1656,
+    "timeMonth": 1662,
+    "timeYear": 1662,
     "dailyMinutesDown": {
       "2025-11-14": 6
     }
@@ -90,11 +90,11 @@
     "uptimeWeek": "100.00%",
     "uptimeMonth": "99.96%",
     "uptimeYear": "99.96%",
-    "time": 1307,
-    "timeDay": 1810,
-    "timeWeek": 1129,
-    "timeMonth": 1307,
-    "timeYear": 1307,
+    "time": 1292,
+    "timeDay": 1041,
+    "timeWeek": 1237,
+    "timeMonth": 1292,
+    "timeYear": 1292,
     "dailyMinutesDown": {
       "2025-11-14": 6
     }
