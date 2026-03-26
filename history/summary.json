@@ -24,18 +24,19 @@
     "url": "https://skolernesudviklingscenter.randers.dk/da/soeg",
     "icon": "https://icons.duckduckgo.com/ip3/skolernesudviklingscenter.randers.dk.ico",
     "slug": "skolernesudviklingscenter-randers-dk",
-    "status": "up",
+    "status": "down",
     "uptime": "100.00%",
-    "uptimeDay": "100.00%",
-    "uptimeWeek": "100.00%",
-    "uptimeMonth": "100.00%",
+    "uptimeDay": "99.74%",
+    "uptimeWeek": "99.96%",
+    "uptimeMonth": "99.99%",
     "uptimeYear": "100.00%",
-    "time": 1881,
-    "timeDay": 1662,
-    "timeWeek": 1621,
-    "timeMonth": 1549,
-    "timeYear": 1881,
+    "time": 2051,
+    "timeDay": 13849,
+    "timeWeek": 4673,
+    "timeMonth": 2393,
+    "timeYear": 2051,
     "dailyMinutesDown": {
+      "2026-03-26": 4,
       "2025-11-14": 6
     }
   },
@@ -44,11 +45,11 @@
     "url": "https://nordbyenkalder.randers.dk/soeg",
     "icon": "https://icons.duckduckgo.com/ip3/nordbyenkalder.randers.dk.ico",
     "slug": "nordbyenkalder-randers-dk",
-    "status": "up",
+    "status": "down",
     "uptime": "100.00%",
-    "uptimeDay": "100.00%",
-    "uptimeWeek": "100.00%",
-    "uptimeMonth": "100.00%",
+    "uptimeDay": "99.81%",
+    "uptimeWeek": "99.97%",
+    "uptimeMonth": "99.99%",
     "uptimeYear": "100.00%",
     "time": 1997,
     "timeDay": 1765,
@@ -56,6 +57,7 @@
     "timeMonth": 1517,
     "timeYear": 1997,
     "dailyMinutesDown": {
+      "2026-03-26": 3,
       "2025-11-14": 6
     }
   },
@@ -64,10 +66,10 @@
     "url": "https://sprogcenter.randers.dk/soeg",
     "icon": "https://icons.duckduckgo.com/ip3/sprogcenter.randers.dk.ico",
     "slug": "sprogcenter-randers-dk",
-    "status": "up",
+    "status": "down",
     "uptime": "100.00%",
-    "uptimeDay": "100.00%",
-    "uptimeWeek": "100.00%",
+    "uptimeDay": "99.89%",
+    "uptimeWeek": "99.98%",
     "uptimeMonth": "100.00%",
     "uptimeYear": "100.00%",
     "time": 2046,
@@ -76,6 +78,7 @@
     "timeMonth": 1394,
     "timeYear": 2046,
     "dailyMinutesDown": {
+      "2026-03-26": 2,
       "2025-11-14": 6
     }
   },
@@ -84,9 +87,9 @@
     "url": "https://www.museumoj.dk",
     "icon": "https://icons.duckduckgo.com/ip3/www.museumoj.dk.ico",
     "slug": "museumoj.dk",
-    "status": "up",
+    "status": "down",
     "uptime": "100.00%",
-    "uptimeDay": "100.00%",
+    "uptimeDay": "99.99%",
     "uptimeWeek": "100.00%",
     "uptimeMonth": "100.00%",
     "uptimeYear": "100.00%",
@@ -96,6 +99,7 @@
     "timeMonth": 1544,
     "timeYear": 1500,
     "dailyMinutesDown": {
+      "2026-03-26": 0,
       "2025-11-14": 6
     }
   }
