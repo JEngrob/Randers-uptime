@@ -1,7 +1,7 @@
 url: https://www.randers.dk
-status: up
-code: 200
-responseTime: 1467
-lastUpdated: 2026-03-26T07:45:02.348Z
+status: down
+code: 403
+responseTime: 374
+lastUpdated: 2026-03-26T12:33:43.039Z
 startTime: 2025-11-13T13:24:34.429Z
 generator: Upptime <https://github.com/upptime/upptime>
