@@ -26,10 +26,10 @@
     "url": "https://skolernesudviklingscenter.randers.dk/da/soeg",
     "icon": "https://icons.duckduckgo.com/ip3/skolernesudviklingscenter.randers.dk.ico",
     "slug": "skolernesudviklingscenter-randers-dk",
-    "status": "up",
+    "status": "down",
     "uptime": "99.97%",
-    "uptimeDay": "100.00%",
-    "uptimeWeek": "100.00%",
+    "uptimeDay": "99.90%",
+    "uptimeWeek": "99.99%",
     "uptimeMonth": "99.87%",
     "uptimeYear": "99.97%",
     "time": 2002,
@@ -38,6 +38,7 @@
     "timeMonth": 2318,
     "timeYear": 2002,
     "dailyMinutesDown": {
+      "2026-04-11": 1,
       "2026-03-26": 55,
       "2025-11-14": 6
     }
