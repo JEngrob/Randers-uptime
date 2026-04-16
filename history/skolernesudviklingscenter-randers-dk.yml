@@ -1,7 +1,7 @@
 url: https://skolernesudviklingscenter.randers.dk/da/soeg
-status: up
-code: 200
-responseTime: 1506
-lastUpdated: 2026-04-15T23:14:26.584Z
+status: down
+code: 500
+responseTime: 1736
+lastUpdated: 2026-04-16T01:43:30.975Z
 startTime: 2025-11-13T13:24:36.465Z
 generator: Upptime <https://github.com/upptime/upptime>
