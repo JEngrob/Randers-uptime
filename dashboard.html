@@ -97,17 +97,71 @@ footer a { color: var(--blue); text-decoration: none; }
 
 <script>
 const RAW = 'https://raw.githubusercontent.com/JEngrob/Randers-uptime/master/';
+const GH_API = 'https://api.github.com/repos/JEngrob/Randers-uptime/commits';
 let sites = [], period = 'Day', barChart;
-
-function graphSlug(name) {
-  return name.toLowerCase()
-    .replace(/ø/g,'o').replace(/æ/g,'ae').replace(/å/g,'aa')
-    .replace(/[\s.]+/g,'-').replace(/[^a-z0-9-]/g,'')
-    .replace(/-+/g,'-').replace(/^-|-$/g,'');
-}
+const histCharts = {};
 
 const periodLabel = { Day: 'dag', Week: 'uge', Month: 'måned', Year: 'år' };
-const periodGraph  = { Day: 'day', Week: 'week', Month: 'month', Year: 'year' };
+
+const HIST_PAGES = 10;
+const periodCfg = {
+  Day:   { groupMs: 5*60*1000,      smoothW: 5 },
+  Week:  { groupMs: 60*60*1000,     smoothW: 4 },
+  Month: { groupMs: 6*60*60*1000,   smoothW: 4 },
+  Year:  { groupMs: 24*60*60*1000,  smoothW: 5 },
+};
+
+function rollingAvg(vals, w) {
+  return vals.map((_, i) => {
+    const s = Math.max(0, i - Math.floor(w / 2));
+    const e = Math.min(vals.length, s + w);
+    const sl = vals.slice(s, e);
+    return Math.round(sl.reduce((a, b) => a + b, 0) / sl.length);
+  });
+}
+
+function groupBy(pts, ms) {
+  const map = new Map();
+  for (const p of pts) {
+    const k = Math.floor(p.t / ms) * ms;
+    if (!map.has(k)) map.set(k, []);
+    map.get(k).push(p.ms);
+  }
+  return [...map.entries()].sort(([a],[b]) => a-b)
+    .map(([t, vals]) => ({ t, ms: Math.round(vals.reduce((a,b)=>a+b,0)/vals.length) }));
+}
+
+function fmtTime(ts, groupMs) {
+  const d = new Date(ts);
+  if (groupMs >= 24*3600*1000) return d.toLocaleDateString('da-DK',{day:'numeric',month:'short'});
+  if (groupMs >= 3600*1000)    return d.toLocaleDateString('da-DK',{day:'numeric',month:'short'}) + ' ' + d.toLocaleTimeString('da-DK',{hour:'2-digit'});
+  return d.toLocaleTimeString('da-DK',{hour:'2-digit',minute:'2-digit'});
+}
+
+async function fetchHistory(slug) {
+  const cacheKey = `randers_hist_${slug}`;
+  const cached = sessionStorage.getItem(cacheKey);
+  if (cached) return JSON.parse(cached);
+
+  const pts = [];
+  for (let p = 1; p <= HIST_PAGES; p++) {
+    try {
+      const r = await fetch(`${GH_API}?path=history/${slug}.yml&per_page=100&page=${p}`,
+        { headers: { Accept: 'application/vnd.github.v3+json' } });
+      if (!r.ok) break;
+      const data = await r.json();
+      if (!Array.isArray(data) || !data.length) break;
+      for (const c of data) {
+        const m = c.commit.message.match(/in (\d+) ms/);
+        if (m) pts.push({ t: new Date(c.commit.author.date).getTime(), ms: +m[1] });
+      }
+      if (data.length < 100) break;
+    } catch { break; }
+  }
+  pts.sort((a,b) => a.t - b.t);
+  try { sessionStorage.setItem(cacheKey, JSON.stringify(pts)); } catch {}
+  return pts;
+}
 
 function uptime(s) { return parseFloat(s['uptime' + period] || s.uptime || '0'); }
 function time(s)   { return s['time' + period] || s.time || 0; }
@@ -192,13 +246,76 @@ function renderBar() {
 }
 
 function renderHistory() {
-  const gp = periodGraph[period];
-  document.getElementById('history').innerHTML = sites.map(s =>
+  const grid = document.getElementById('history');
+  Object.values(histCharts).forEach(c => c.destroy());
+  Object.keys(histCharts).forEach(k => delete histCharts[k]);
+
+  grid.innerHTML = sites.map((s, i) =>
     `<div class="history-card">
       <div class="history-name">${s.name}</div>
-      <img src="${RAW}graphs/${graphSlug(s.name)}/response-time-${gp}.png" alt="Responstid graf for ${s.name}" loading="lazy" onerror="this.style.opacity='0.3'">
+      <div style="position:relative;height:110px" id="hist-wrap-${i}">
+        <canvas id="hist-${i}"></canvas>
+      </div>
     </div>`
   ).join('');
+
+  sites.forEach((s, i) => loadHistChart(s, i));
+}
+
+async function loadHistChart(s, i) {
+  const cfg = periodCfg[period];
+  const wrap = document.getElementById(`hist-wrap-${i}`);
+  const canvasId = `hist-${i}`;
+
+  const pts = await fetchHistory(s.slug);
+
+  if (!pts.length) {
+    wrap.innerHTML = '<p style="text-align:center;padding:30px 0;font-size:12px;color:var(--muted)">Ingen data endnu</p>';
+    return;
+  }
+
+  const grouped = groupBy(pts, cfg.groupMs);
+  const smoothed = rollingAvg(grouped.map(d => d.ms), cfg.smoothW);
+  const labels = grouped.map(d => fmtTime(d.t, cfg.groupMs));
+
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+
+  histCharts[canvasId] = new Chart(canvas, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        data: smoothed,
+        borderColor: '#00457C',
+        borderWidth: 1.5,
+        backgroundColor: 'rgba(0,69,124,0.07)',
+        fill: true,
+        tension: 0.4,
+        pointRadius: smoothed.length > 60 ? 0 : 2,
+        pointHoverRadius: 4,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      animation: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: c => c.raw.toLocaleString('da-DK') + ' ms' } }
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: { maxTicksLimit: 5, font: { size: 10 }, color: '#9ca3af', maxRotation: 0 }
+        },
+        y: {
+          grid: { color: 'rgba(0,0,0,0.04)' },
+          ticks: { maxTicksLimit: 4, font: { size: 10 }, color: '#9ca3af', callback: v => v.toLocaleString('da-DK') },
+          suggestedMin: 500
+        }
+      }
+    }
+  });
 }
 
 function setPeriod(p, btn) {
