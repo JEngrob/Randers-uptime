@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Lato:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
-:root { --blue: #6C732B; --bg: #EDE5DC; --card: #FDF8F2; --border: #D9D2C9; --text: #373128; --muted: #696259; --up: #476B00; --down: #971210; --up-bg: #E6F0D0; --up-fg: #3A5200; --down-bg: #F2D9D6; --down-fg: #7A1A0C; }
+:root { --blue: #6C732B; --secondary: #394154; --bg: #EDE5DC; --card: #FDF8F2; --border: #D9D2C9; --text: #373128; --muted: #696259; --up: #476B00; --down: #971210; --up-bg: #E6F0D0; --up-fg: #3A5200; --down-bg: #F2D9D6; --down-fg: #7A1A0C; }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: "Lato", Arial, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 header { background: var(--blue); color: #fff; padding: 14px 20px; display: flex; align-items: center; gap: 12px; }
@@ -234,7 +234,7 @@ function renderBar() {
     type: 'bar',
     data: {
       labels: sites.map(s => s.name),
-      datasets: [{ label: 'ms', data: sites.map(time), backgroundColor: '#6C732B', borderRadius: 4, borderSkipped: false }]
+      datasets: [{ label: 'ms', data: sites.map(time), backgroundColor: '#394154', borderRadius: 4, borderSkipped: false }]
     },
     options: {
       responsive: true, maintainAspectRatio: false,
@@ -289,9 +289,9 @@ async function loadHistChart(s, i) {
       labels,
       datasets: [{
         data: smoothed,
-        borderColor: '#6C732B',
+        borderColor: '#394154',
         borderWidth: 1.5,
-        backgroundColor: 'rgba(108,115,43,0.07)',
+        backgroundColor: 'rgba(57,65,84,0.07)',
         fill: true,
         tension: 0.4,
         pointRadius: smoothed.length > 60 ? 0 : 2,
