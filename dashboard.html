@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Driftstatus — Randers Kommune</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root { --blue: #00457C; --bg: #F5F7F8; --card: #fff; --border: #e8eaed; --text: #2A2A2A; --muted: #6b7280; --up: #1D9E75; --down: #E24B4A; --up-bg: #EAF3DE; --up-fg: #3B6D11; --down-bg: #FCEBEB; --down-fg: #A32D2D; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: "Roboto", Arial, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+header { background: var(--blue); color: #fff; padding: 14px 20px; display: flex; align-items: center; gap: 12px; }
+header img { height: 30px; }
+header h1 { font-size: 17px; font-weight: 400; }
+.container { max-width: 960px; margin: 0 auto; padding: 24px 16px; }
+.toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+.all-up { font-size: 14px; font-weight: 500; color: var(--up); display: flex; align-items: center; gap: 7px; }
+.all-up .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--up); flex-shrink: 0; }
+.all-down .dot { background: var(--down); }
+.all-down { color: var(--down); }
+.tabs { display: flex; gap: 3px; background: var(--card); border: 1px solid var(--border); border-radius: 7px; padding: 3px; }
+.tabs button { padding: 4px 13px; border: none; background: none; border-radius: 5px; cursor: pointer; font-size: 13px; color: var(--muted); transition: background .15s, color .15s; }
+.tabs button.active { background: var(--blue); color: #fff; }
+.metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 20px; }
+.metric { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+.metric-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 5px; }
+.metric-value { font-size: 26px; font-weight: 500; line-height: 1.1; }
+.metric-sub { font-size: 12px; color: var(--muted); margin-top: 3px; }
+.site-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 20px; }
+.site-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+.site-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.site-name { font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 8px; }
+.sdot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.badge { font-size: 11px; padding: 2px 9px; border-radius: 12px; font-weight: 500; }
+.site-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+.slabel { font-size: 11px; color: var(--muted); margin-bottom: 2px; }
+.sval { font-size: 16px; font-weight: 500; }
+.sval-unit { font-size: 12px; color: var(--muted); font-weight: 400; }
+.bar-bg { height: 5px; background: #eee; border-radius: 3px; overflow: hidden; }
+.bar-fill { height: 5px; border-radius: 3px; background: var(--blue); }
+.bar-labels { display: flex; justify-content: space-between; margin-top: 4px; font-size: 11px; color: var(--muted); }
+.chart-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 18px 20px; margin-bottom: 20px; }
+.chart-title { font-size: 13px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 14px; }
+.history-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+.history-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; }
+.history-name { font-size: 13px; font-weight: 500; margin-bottom: 8px; }
+.history-card img { width: 100%; border-radius: 4px; display: block; background: #f9f9f9; }
+footer { text-align: center; font-size: 12px; color: var(--muted); padding: 24px 16px; }
+footer a { color: var(--blue); text-decoration: none; }
+.loading { text-align: center; padding: 60px 20px; color: var(--muted); font-size: 15px; }
+.err { background: var(--down-bg); color: var(--down-fg); padding: 16px; border-radius: 8px; text-align: center; }
+@media (max-width: 580px) { .metrics, .site-grid, .history-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header>
+  <img src="https://www.randers.dk/media/o0zlm1pt/randers_kommune_logo.svg" alt="Randers Kommune" onerror="this.style.display='none'">
+  <h1>Driftstatus</h1>
+</header>
+
+<div class="container">
+  <div id="loading" class="loading">Henter data…</div>
+  <div id="err" class="err" style="display:none">Kunne ikke hente data. <a href="">Prøv igen</a>.</div>
+
+  <div id="main" style="display:none">
+    <div class="toolbar">
+      <div id="all-status" class="all-up"><span class="dot"></span><span id="status-text"></span></div>
+      <div class="tabs">
+        <button class="active" onclick="setPeriod('Day',this)">Dag</button>
+        <button onclick="setPeriod('Week',this)">Uge</button>
+        <button onclick="setPeriod('Month',this)">Måned</button>
+        <button onclick="setPeriod('Year',this)">År</button>
+      </div>
+    </div>
+
+    <div class="metrics" id="metrics"></div>
+    <div class="site-grid" id="sites"></div>
+
+    <div class="chart-card">
+      <div class="chart-title">Responstid sammenligning</div>
+      <div style="position:relative;height:160px"><canvas id="bar"></canvas></div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-title">Historisk responstid</div>
+      <div class="history-grid" id="history"></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Data fra <a href="https://jengrob.github.io/Randers-uptime/" target="_blank" rel="noopener">Randers Uptime</a>
+  &nbsp;·&nbsp; Opdateres hvert 5. min
+  &nbsp;·&nbsp; <span id="updated"></span>
+</footer>
+
+<script>
+const RAW = 'https://raw.githubusercontent.com/JEngrob/Randers-uptime/master/';
+let sites = [], period = 'Day', barChart;
+
+function graphSlug(name) {
+  return name.toLowerCase()
+    .replace(/ø/g,'o').replace(/æ/g,'ae').replace(/å/g,'aa')
+    .replace(/[\s.]+/g,'-').replace(/[^a-z0-9-]/g,'')
+    .replace(/-+/g,'-').replace(/^-|-$/g,'');
+}
+
+const periodLabel = { Day: 'dag', Week: 'uge', Month: 'måned', Year: 'år' };
+const periodGraph  = { Day: 'day', Week: 'week', Month: 'month', Year: 'year' };
+
+function uptime(s) { return parseFloat(s['uptime' + period] || s.uptime || '0'); }
+function time(s)   { return s['time' + period] || s.time || 0; }
+
+function renderMetrics() {
+  const upCount = sites.filter(s => s.status === 'up').length;
+  const minU = Math.min(...sites.map(uptime)).toFixed(2);
+  const avgT = Math.round(sites.reduce((a, s) => a + time(s), 0) / sites.length);
+
+  const allUp = upCount === sites.length;
+  const el = document.getElementById('all-status');
+  el.className = 'all-up' + (allUp ? '' : ' all-down');
+  el.querySelector('.dot').style.background = allUp ? 'var(--up)' : 'var(--down)';
+  document.getElementById('status-text').textContent =
+    allUp ? `Alle ${sites.length} systemer oppe` : `${upCount} af ${sites.length} systemer oppe`;
+
+  document.getElementById('metrics').innerHTML = `
+    <div class="metric">
+      <div class="metric-label">Systemer oppe</div>
+      <div class="metric-value" style="color:${allUp?'var(--up)':'var(--down)'}">${upCount}/${sites.length}</div>
+      <div class="metric-sub">Per ${periodLabel[period]}</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Laveste uptime</div>
+      <div class="metric-value">${minU}<span style="font-size:16px">%</span></div>
+      <div class="metric-sub">Per ${periodLabel[period]}</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Gns. responstid</div>
+      <div class="metric-value">${avgT.toLocaleString('da-DK')}<span style="font-size:16px"> ms</span></div>
+      <div class="metric-sub">Per ${periodLabel[period]}</div>
+    </div>`;
+}
+
+function renderSites() {
+  document.getElementById('sites').innerHTML = sites.map(s => {
+    const u = uptime(s), t = time(s), isUp = s.status === 'up';
+    return `<div class="site-card">
+      <div class="site-head">
+        <div class="site-name">
+          <span class="sdot" style="background:${isUp?'var(--up)':'var(--down)'}"></span>
+          ${s.name}
+        </div>
+        <span class="badge" style="background:${isUp?'var(--up-bg)':'var(--down-bg)'};color:${isUp?'var(--up-fg)':'var(--down-fg)'}">
+          ${isUp?'Oppe':'Nede'}
+        </span>
+      </div>
+      <div class="site-row">
+        <div>
+          <div class="slabel">Responstid</div>
+          <div class="sval">${t.toLocaleString('da-DK')}<span class="sval-unit"> ms</span></div>
+        </div>
+        <div>
+          <div class="slabel">Uptime (${periodLabel[period]})</div>
+          <div class="sval">${u.toFixed(2)}<span class="sval-unit">%</span></div>
+        </div>
+      </div>
+      <div class="bar-bg"><div class="bar-fill" style="width:${Math.min(100,u).toFixed(3)}%"></div></div>
+      <div class="bar-labels"><span>0%</span><span>${u.toFixed(2)}%</span></div>
+    </div>`;
+  }).join('');
+}
+
+function renderBar() {
+  const ctx = document.getElementById('bar');
+  if (barChart) barChart.destroy();
+  barChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: sites.map(s => s.name),
+      datasets: [{ label: 'ms', data: sites.map(time), backgroundColor: '#00457C', borderRadius: 4, borderSkipped: false }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => c.raw.toLocaleString('da-DK') + ' ms' } } },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 11 }, color: '#6b7280' } },
+        y: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 11 }, color: '#6b7280', callback: v => v.toLocaleString('da-DK') }, suggestedMin: 500 }
+      }
+    }
+  });
+}
+
+function renderHistory() {
+  const gp = periodGraph[period];
+  document.getElementById('history').innerHTML = sites.map(s =>
+    `<div class="history-card">
+      <div class="history-name">${s.name}</div>
+      <img src="${RAW}graphs/${graphSlug(s.name)}/response-time-${gp}.png" alt="Responstid graf for ${s.name}" loading="lazy" onerror="this.style.opacity='0.3'">
+    </div>`
+  ).join('');
+}
+
+function setPeriod(p, btn) {
+  period = p;
+  document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderMetrics(); renderSites(); renderBar(); renderHistory();
+}
+
+async function init() {
+  try {
+    const r = await fetch(RAW + 'history/summary.json');
+    if (!r.ok) throw new Error();
+    sites = await r.json();
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('main').style.display = '';
+    const now = new Date();
+    document.getElementById('updated').textContent =
+      'Sidst hentet ' + now.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' });
+    setPeriod('Day', document.querySelector('.tabs button.active'));
+  } catch {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('err').style.display = '';
+  }
+}
+
+init();
+</script>
+</body>
+</html>
